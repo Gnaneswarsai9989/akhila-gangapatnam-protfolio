@@ -1,0 +1,135 @@
+/* ===================================================
+   AKHILA — WORKS PAGE CSS
+   works.html exclusive styles
+=================================================== */
+
+/* ===== WORKS HERO ===== */
+.works-hero {
+  min-height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 40px 60px;
+  background: var(--black);
+  text-align: center;
+  position: relative;
+}
+
+.works-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center top, rgba(201,169,110,0.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.works-hero-inner { position: relative; z-index: 1; }
+
+.works-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.works-hero-sub {
+  font-size: 0.92rem;
+  color: var(--white-50);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ===== WORKS PAGE GRID ===== */
+.works-page-grid-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px 60px;
+}
+
+.works-page-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ===== CARD ===== */
+.works-page-card {
+  overflow: hidden;
+  border-radius: var(--radius);
+  transition: transform 0.4s cubic-bezier(0.25,0.8,0.25,1),
+              box-shadow 0.4s ease;
+  background: #000;
+}
+
+.works-page-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 50px rgba(201,169,110,0.18), 0 0 0 1px rgba(201,169,110,0.15);
+}
+
+/* ===== EMBED CLIP — hides header & footer of Instagram embed ===== */
+/*
+  Instagram embed iframe structure (approximate heights):
+    - Header (profile pic + username + View Profile btn): ~65px
+    - Video area: ~540px  (for a 9:16 reel at 320px wide)
+    - Footer (View more on Instagram + likes + actions): ~100px
+  Total iframe height: ~705px
+
+  We set a fixed height on .embed-clip equal to just the video area,
+  then use margin-top on the iframe to push the header out of view above.
+  overflow:hidden clips both the top and bottom chrome.
+*/
+.embed-clip {
+  width: 100%;
+  /*
+    header (~65px hidden by margin-top)  +  video  +  footer (~100px clipped here)
+    Reduce height to clip "View more on Instagram" + likes/actions bar
+  */
+  height: 450px;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+/* Shift the Instagram iframe UP so header scrolls out of view */
+.embed-clip .instagram-media,
+.embed-clip iframe {
+  margin-top: -65px !important;  /* hide the top profile header */
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+  min-width: unset !important;
+  max-width: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  background: #000 !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .works-page-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .works-page-grid {
+    grid-template-columns: 1fr;
+  }
+  .works-hero {
+    padding: 120px 24px 40px;
+  }
+  .works-page-grid-section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  /* On mobile the embed is narrower so heights shift slightly */
+  .embed-clip {
+    height: 420px;
+  }
+}
