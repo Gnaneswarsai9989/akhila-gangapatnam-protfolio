@@ -62,7 +62,7 @@ akhila-portfolio/
 ---
 
 ## 📞 Contact Info Embedded
-- 📍 Nellore, Andhra Pradesh
+- 📍 Hyderabad, Telangana
 - 📱 93461 59120
 - 📷 @akhila_gangapatnam
 - 🎬 @shecapturesandcuts

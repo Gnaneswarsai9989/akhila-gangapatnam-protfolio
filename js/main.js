@@ -8,26 +8,60 @@ const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
 const navLinkItems = document.querySelectorAll('.nav-link');
+const navInner = document.querySelector('.nav-inner');
+
+function handleResponsiveNav() {
+  if (window.innerWidth <= 900) {
+    if (navLinks && navLinks.parentElement !== document.body) {
+      document.body.appendChild(navLinks);
+    }
+  } else {
+    if (navLinks && navInner && navLinks.parentElement !== navInner) {
+      navInner.insertBefore(navLinks, hamburger);
+    }
+  }
+}
+window.addEventListener('resize', handleResponsiveNav);
+handleResponsiveNav();
+
 
 window.addEventListener('scroll', () => {
   if (window.scrollY > 60) {
     navbar.classList.add('scrolled');
+    navbar.classList.remove('hero-top');
   } else {
     navbar.classList.remove('scrolled');
+    navbar.classList.add('hero-top');
   }
   updateActiveNav();
 });
 
+// Set hero-top on page load
+if (window.scrollY <= 60) navbar.classList.add('hero-top');
+
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('active');
   navLinks.classList.toggle('open');
-  document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+  const isOpen = navLinks.classList.contains('open');
+  navbar.classList.toggle('menu-open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
 });
+
+const navClose = document.getElementById('navClose');
+if (navClose) {
+  navClose.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('open');
+    navbar.classList.remove('menu-open');
+    document.body.style.overflow = '';
+  });
+}
 
 navLinkItems.forEach(link => {
   link.addEventListener('click', () => {
     hamburger.classList.remove('active');
     navLinks.classList.remove('open');
+    navbar.classList.remove('menu-open');
     document.body.style.overflow = '';
   });
 });
@@ -45,159 +79,18 @@ function updateActiveNav() {
   });
 }
 
-// ===== TYPING EFFECT (Continuous Loop) =====
-const nameEl = document.getElementById('typingName');
-const lines = ['Akhila', 'Gangapatnam'];
-const PAUSE_AFTER_TYPE  = 2200; // ms to pause when fully typed
-const PAUSE_AFTER_ERASE = 800;  // ms to pause before retyping
-const TYPE_SPEED        = 130;  // ms per character while typing (slower)
-const ERASE_SPEED       = 65;   // ms per character while erasing (slower)
 
 
-let charIndex = 0;
-let lineIndex = 0;
-let isErasing = false;
-
-function buildHTML() {
-  let html = '';
-  for (let l = 0; l < lines.length; l++) {
-    if (l < lineIndex) {
-      html += lines[l] + '<br>';
-    } else if (l === lineIndex) {
-      html += lines[l].slice(0, charIndex);
-    }
-  }
-  nameEl.innerHTML = html;
+// ===== VIDEO PARALLAX =====
+const heroVideo = document.querySelector('.hero-video');
+if (heroVideo) {
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const rate = scrolled * 0.25;
+    heroVideo.style.transform = `translateY(${rate}px) scale(1.02)`;
+  });
 }
 
-function loopTypeWriter() {
-  if (!isErasing) {
-    // --- Typing forward ---
-    if (lineIndex < lines.length) {
-      if (charIndex < lines[lineIndex].length) {
-        charIndex++;
-        buildHTML();
-        setTimeout(loopTypeWriter, TYPE_SPEED);
-      } else {
-        // Finished current line
-        lineIndex++;
-        charIndex = 0;
-        if (lineIndex < lines.length) {
-          // Move to next line
-          buildHTML();
-          setTimeout(loopTypeWriter, TYPE_SPEED + 150);
-        } else {
-          // All lines typed — NO cursor during pause → no 3rd line!
-          buildHTML();
-          setTimeout(() => { isErasing = true; loopTypeWriter(); }, PAUSE_AFTER_TYPE);
-        }
-      }
-    }
-  } else {
-    // --- Erasing backward ---
-    if (lineIndex > 0 || charIndex > 0) {
-      if (charIndex === 0 && lineIndex > 0) {
-        lineIndex--;
-        charIndex = lines[lineIndex].length;
-      }
-      charIndex--;
-      buildHTML();
-      setTimeout(loopTypeWriter, ERASE_SPEED);
-    } else {
-      // Fully erased — no cursor during pause
-      nameEl.innerHTML = '';
-      isErasing = false;
-      setTimeout(loopTypeWriter, PAUSE_AFTER_ERASE);
-    }
-  }
-}
-
-// Kick off after initial delay
-setTimeout(loopTypeWriter, 600);
-
-// ===== PARTICLE SYSTEM =====
-(function initParticles() {
-  const container = document.getElementById('particles');
-  const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
-  container.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
-
-  let W, H, particles = [], animFrame;
-  const COUNT = 70;
-
-  function resize() {
-    W = canvas.width = container.offsetWidth;
-    H = canvas.height = container.offsetHeight;
-  }
-
-  class Particle {
-    constructor() { this.reset(); }
-    reset() {
-      this.x = Math.random() * W;
-      this.y = Math.random() * H;
-      this.r = Math.random() * 1.5 + 0.3;
-      this.vx = (Math.random() - 0.5) * 0.3;
-      this.vy = -Math.random() * 0.5 - 0.1;
-      this.life = 0;
-      this.maxLife = Math.random() * 200 + 100;
-      this.gold = Math.random() < 0.35;
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      this.life++;
-      if (this.life > this.maxLife || this.y < -10) this.reset();
-    }
-    draw() {
-      const alpha = Math.sin((this.life / this.maxLife) * Math.PI) * 0.7;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = this.gold
-        ? `rgba(201,169,110,${alpha})`
-        : `rgba(255,255,255,${alpha * 0.4})`;
-      ctx.fill();
-    }
-  }
-
-  function init() {
-    resize();
-    particles = Array.from({ length: COUNT }, () => {
-      const p = new Particle();
-      p.life = Math.random() * p.maxLife; // stagger starts
-      return p;
-    });
-    loop();
-  }
-
-  function loop() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach(p => { p.update(); p.draw(); });
-
-    // Draw connecting lines for nearby gold particles
-    const golds = particles.filter(p => p.gold);
-    for (let i = 0; i < golds.length; i++) {
-      for (let j = i + 1; j < golds.length; j++) {
-        const dx = golds[i].x - golds[j].x;
-        const dy = golds[i].y - golds[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) {
-          ctx.beginPath();
-          ctx.moveTo(golds[i].x, golds[i].y);
-          ctx.lineTo(golds[j].x, golds[j].y);
-          ctx.strokeStyle = `rgba(201,169,110,${0.06 * (1 - dist / 100)})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-
-    animFrame = requestAnimationFrame(loop);
-  }
-
-  window.addEventListener('resize', () => { resize(); });
-  init();
-})();
 
 
 // ===== STAT COUNTER =====
@@ -365,14 +258,15 @@ document.querySelectorAll('.work-card, .stat-card').forEach(card => {
   });
 });
 
-// ===== HERO IMAGE PARALLAX =====
-const heroWrap = document.querySelector('.home-image-wrap');
-window.addEventListener('mousemove', (e) => {
-  if (!heroWrap) return;
-  const x = (e.clientX / window.innerWidth - 0.5) * 12;
-  const y = (e.clientY / window.innerHeight - 0.5) * 8;
-  heroWrap.style.transform = `perspective(800px) rotateY(${x}deg) rotateX(${-y}deg)`;
-});
+// ===== HERO VIDEO MOUSE SUBTLE TILT =====
+const heroSection = document.querySelector('.home');
+if (heroSection && heroVideo) {
+  heroSection.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 4;
+    const y = (e.clientY / window.innerHeight - 0.5) * 4;
+    heroVideo.style.transform = `translateY(${window.scrollY * 0.25}px) scale(1.06) translate(${x}px, ${y}px)`;
+  });
+}
 
 // ===== SMOOTH ANCHOR SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -398,7 +292,7 @@ document.querySelectorAll('img').forEach(img => {
       const overlay = document.createElement('div');
       overlay.style.cssText = `
         position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-        font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:700;
+        font-family:'Plus Jakarta Sans',sans-serif;font-size:5rem;font-weight:700;
         color:rgba(201,169,110,0.4);letter-spacing:0.05em;user-select:none;
       `;
       overlay.textContent = 'AG';
@@ -406,3 +300,55 @@ document.querySelectorAll('img').forEach(img => {
     }
   });
 });
+
+// ===== PORTFOLIO CARDS AUTOMATIC IMAGES ROTATION (SLIDESHOW) =====
+const slideshowImages = [
+  'images/images/work1.jpg',
+  'images/images/work2.jpg',
+  'images/images/work3.jpg',
+  'images/images/work4.jpg',
+  'images/images/work5.jpg',
+  'images/images/work6.jpg'
+];
+
+// Preload all slideshow images to prevent loading jumps during rotation
+slideshowImages.forEach(src => {
+  const img = new Image();
+  img.src = src;
+});
+
+const cards = document.querySelectorAll('.work-card');
+if (cards.length > 0) {
+  let globalOffset = 0;
+
+  setInterval(() => {
+    globalOffset = (globalOffset + 1) % slideshowImages.length;
+
+    cards.forEach((card, index) => {
+      const bg = card.querySelector('.work-thumb-bg');
+      
+      // Calculate a unique image index for this card based on the global offset
+      const nextIndex = (index + globalOffset) % slideshowImages.length;
+      const nextSrc = slideshowImages[nextIndex];
+
+      // Create cross-fade overlay
+      const fadeBg = document.createElement('div');
+      fadeBg.className = 'work-thumb-bg-fade';
+      fadeBg.style.backgroundImage = `url('${nextSrc}')`;
+
+      // Insert overlay exactly after original background so it renders behind text/icons
+      bg.insertAdjacentElement('afterend', fadeBg);
+
+      // Fade overlay in
+      setTimeout(() => {
+        fadeBg.style.opacity = '1';
+      }, 50);
+
+      // Swap original background and cleanup after transition completes
+      setTimeout(() => {
+        bg.style.backgroundImage = `url('${nextSrc}')`;
+        fadeBg.remove();
+      }, 500);
+    });
+  }, 1700);
+}

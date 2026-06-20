@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="100%" height="100%">
-  <path d="M25,15 L45,15 L45,45 L25,45 Z" fill="none" stroke="#c9a96e" stroke-width="2"/>
-  <circle cx="35" cy="30" r="8" fill="#c9a96e" opacity="0.8"/>
-  <path d="M45,22 L55,17 L55,43 L45,38 Z" fill="#c9a96e"/>
-  <text x="70" y="36" font-family="'Manrope', sans-serif" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="1.5">AURA</text>
-  <text x="70" y="48" font-family="'Manrope', sans-serif" font-size="10" font-weight="500" fill="#c9a96e" letter-spacing="3">CINEMA</text>
+  <path d="M25,15 L45,15 L45,45 L25,45 Z" fill="none" stroke="#1c1c1c" stroke-width="2"/>
+  <circle cx="35" cy="30" r="8" fill="#1c1c1c" opacity="0.8"/>
+  <path d="M45,22 L55,17 L55,43 L45,38 Z" fill="#1c1c1c"/>
+  <text x="70" y="36" font-family="'Manrope', sans-serif" font-size="16" font-weight="700" fill="#1c1c1c" letter-spacing="1.5">AURA</text>
+  <text x="70" y="48" font-family="'Manrope', sans-serif" font-size="10" font-weight="500" fill="#1c1c1c" letter-spacing="3">CINEMA</text>
 </svg>

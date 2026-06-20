@@ -5,18 +5,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>All Works | Akhila Gangapatnam</title>
-  <meta name="description" content="Browse all cinematic works, reels, wedding films and short films by Akhila Gangapatnam — Digital Creator &amp; Video Editor from Nellore." />
+  <meta name="description"
+    content="Browse all cinematic works, reels, wedding films and short films by Akhila Gangapatnam — Digital Creator &amp; Video Editor from Hyderabad." />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/works.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
+
+
 
   <!-- ========== NAVBAR ========== -->
   <nav class="navbar" id="navbar">
@@ -29,6 +32,7 @@
         <span class="logo-text">angapatnam</span>
       </div>
       <ul class="nav-links" id="navLinks">
+        <button class="nav-close" id="navClose" aria-label="Close menu">✕</button>
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="works.html" class="nav-link active">Works</a></li>
         <li><a href="index.html#about" class="nav-link">About Me</a></li>
@@ -112,7 +116,7 @@
       <div class="works-page-card glass-card" data-cat="reel">
         <div class="embed-clip">
           <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/reel/DVkoLd_Deab/?utm_source=ig_embed"
+            data-instgrm-permalink="https://www.instagram.com/reel/DKwFMbyuOlV/?utm_source=ig_embed"
             data-instgrm-version="14"></blockquote>
         </div>
       </div>
@@ -121,7 +125,7 @@
       <div class="works-page-card glass-card" data-cat="reel">
         <div class="embed-clip">
           <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/reel/DVfi-4IElpC/?utm_source=ig_embed"
+            data-instgrm-permalink="https://www.instagram.com/reel/DHaEIjKys5x/?utm_source=ig_embed"
             data-instgrm-version="14"></blockquote>
         </div>
       </div>
@@ -279,15 +283,13 @@
         </div>
       </div>
 
-    </div>
+      <!-- Back to Home -->
+      <div class="works-back-btn-wrap">
+        <a href="index.html" class="btn-secondary btn-back-dark">
+          <i class="fa fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
   </section>
-
-  <!-- Back to Home -->
-  <div style="text-align:center; padding: 40px 0 80px;">
-    <a href="index.html" class="btn-secondary">
-      <i class="fa fa-arrow-left"></i> Back to Home
-    </a>
-  </div>
 
   <!-- ========== FOOTER ========== -->
   <footer class="footer">
@@ -304,8 +306,10 @@
         <a href="index.html#testimonials">Testimonials</a>
         <a href="index.html#contact">Contact</a>
       </div>
-      <p class="footer-copy">© 2025 Akhila Gangapatnam · Nellore, Andhra Pradesh · All Rights Reserved</p>
-      <p class="footer-credit">Made with <span style="color:#e63946;">&#10084;</span> by <a href="https://webrogs-zhob.vercel.app/" target="_blank" rel="noopener" class="footer-credit-link">webrogs</a></p>
+      <p class="footer-copy">© 2025 Akhila Gangapatnam · Hyderabad, Telangana · All Rights Reserved</p>
+      <p class="footer-credit">Made with <span style="color:#e63946;">&#10084;</span> by <a
+          href="https://webrogs-zhob.vercel.app/" target="_blank" rel="noopener" class="footer-credit-link">webrogs</a>
+      </p>
     </div>
   </footer>
 
@@ -320,20 +324,173 @@
   <script async src="https://www.instagram.com/embed.js"></script>
 
   <script>
-    // Navbar scroll
+    // Navbar scroll — blur-transparent always, dark text when scrolled
     const navbar = document.getElementById('navbar');
+    navbar.classList.add('scrolled'); // always dark text on this light page
     window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      if (window.scrollY > 60) navbar.classList.add('scrolled');
     });
 
-    // Hamburger
+    // Hamburger open
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');
+    const navInner = document.querySelector('.nav-inner');
+
+    function handleResponsiveNav() {
+      if (window.innerWidth <= 900) {
+        if (navLinks && navLinks.parentElement !== document.body) {
+          document.body.appendChild(navLinks);
+        }
+      } else {
+        if (navLinks && navInner && navLinks.parentElement !== navInner) {
+          navInner.insertBefore(navLinks, hamburger);
+        }
+      }
+    }
+    window.addEventListener('resize', handleResponsiveNav);
+    handleResponsiveNav();
+
+    function openMenu() {
+      hamburger.classList.add('active');
+      navLinks.classList.add('open');
+      if (navbar) navbar.classList.add('menu-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+      if (navbar) navbar.classList.remove('menu-open');
+      document.body.style.overflow = '';
+    }
+
     hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      navLinks.classList.toggle('open');
-      document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+      navLinks.classList.contains('open') ? closeMenu() : openMenu();
     });
+
+    // ✕ Close button
+    const navClose = document.getElementById('navClose');
+    if (navClose) navClose.addEventListener('click', closeMenu);
+
+    // Close menu when a nav link is tapped
+    document.querySelectorAll('#navLinks .nav-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // ── Grayscale ↔ Colour toggle ─────────────────────────────────────────────
+    //
+    // WHY THE IFRAME BLOCKS TOUCH EVENTS:
+    // Cross-origin iframes create their own event context. Touch events that
+    // land on the iframe content NEVER bubble up to the parent document's
+    // card element. This means:
+    //   - card.addEventListener('touchstart', ...) does NOT fire on video tap
+    //   - window.blur / focus tricks are unreliable across multiple taps
+    //
+    // THE FIX — transparent tap-interceptor div:
+    // We inject a .color-tap-zone div directly inside .embed-clip, positioned
+    // above the iframe. On mobile:
+    //   1st tap → zone catches it → activates colour → zone hides itself
+    //   2nd tap → goes straight to iframe → video plays in colour
+    //
+    // On desktop: standard click handler on card (no tap zone needed).
+    //
+
+    // ── Desktop colour toggle ─────────────────────────────────────────────────
+    document.querySelectorAll('.works-page-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Desktop only: ignore if touch device (handled by tap zone instead)
+        if (e.sourceCapabilities && !e.sourceCapabilities.firesTouchEvents) {
+          document.querySelectorAll('.works-page-card').forEach(c => {
+            if (c !== card) c.classList.remove('color-active');
+          });
+          card.classList.toggle('color-active');
+        }
+      });
+    });
+
+    // Helper: activate colour on a card
+    function activateCard(card) {
+      document.querySelectorAll('.works-page-card').forEach(c => {
+        if (c !== card) c.classList.remove('color-active');
+      });
+      card.classList.add('color-active');
+    }
+
+    // ── Loader + tap-interceptor injection ────────────────────────────────────
+    document.querySelectorAll('.embed-clip').forEach(clip => {
+      const card = clip.closest('.works-page-card');
+      const cat = card.getAttribute('data-cat');
+      let typeLabel = 'Project';
+      if (cat === 'reel')    typeLabel = 'Cinematic Reel';
+      else if (cat === 'wedding') typeLabel = 'Wedding Film';
+      else if (cat === 'brand')   typeLabel = 'Brand Shoot';
+
+      // — Loader —
+      const loader = document.createElement('div');
+      loader.className = 'embed-loader';
+      loader.innerHTML = `
+        <div class="loader-viewfinder">
+          <div class="loader-corner top-left"></div>
+          <div class="loader-corner top-right"></div>
+          <div class="loader-corner bottom-left"></div>
+          <div class="loader-corner bottom-right"></div>
+          <div class="loader-crosshair"></div>
+          <div class="loader-rec"><span class="rec-dot"></span>REC</div>
+        </div>
+        <p class="loader-text">Loading ${typeLabel}...</p>
+      `;
+      clip.insertBefore(loader, clip.firstChild);
+
+      // — Mobile tap-interceptor —
+      // Only inject on touch-capable devices
+      if ('ontouchstart' in window) {
+        const zone = document.createElement('div');
+        zone.className = 'color-tap-zone';
+        clip.appendChild(zone);
+
+        zone.addEventListener('touchstart', () => {
+          activateCard(card);
+          // Hide the zone: next tap goes directly to the iframe beneath
+          zone.style.display = 'none';
+        }, { passive: true });
+      }
+    });
+
+    // Dynamic cropping of Instagram embeds to show ONLY the video with full height/width
+    function cropInstagramEmbeds() {
+      document.querySelectorAll('.embed-clip').forEach(clip => {
+        const iframe = clip.querySelector('iframe');
+        if (iframe) {
+          // Hide loader once the iframe has loaded and has a height or class
+          const loader = clip.querySelector('.embed-loader');
+          const isRendered = iframe.classList.contains('instagram-media-rendered');
+          const rawHeight = iframe.getAttribute('height') || iframe.style.height;
+          if (loader && (rawHeight || isRendered)) {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+              if (loader.parentNode) loader.remove();
+            }, 400);
+          }
+
+          if (rawHeight) {
+            let h = parseInt(rawHeight);
+            if (!isNaN(h) && h > 0) {
+              // S=1.5 removes ~75px bars each side. T=90px crops header at scale 1.5.
+              let calculatedHeight = Math.round((h - 200) * 1.5);
+              if (calculatedHeight < 200) calculatedHeight = 200;
+              if (calculatedHeight > 480) calculatedHeight = 480;
+
+              // Apply height to the .embed-clip wrapper
+              if (clip.style.height !== calculatedHeight + 'px') {
+                clip.style.height = calculatedHeight + 'px';
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Run crop check frequently to catch Instagram script resizing
+    setInterval(cropInstagramEmbeds, 200);
 
     // Re-process Instagram embeds after page load
     window.addEventListener('load', () => {
@@ -341,6 +498,8 @@
         window.instgrm.Embeds.process();
       }
     });
+
+    // (Colour toggle logic moved up into the card forEach block above)
   </script>
 </body>
 

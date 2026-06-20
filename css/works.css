@@ -1,135 +1,499 @@
 /* ===================================================
    AKHILA — WORKS PAGE CSS
-   works.html exclusive styles
+   works.html exclusive styles — Cinematic Apple Theme
+   Palette: White / Grey / Black only
 =================================================== */
 
 /* ===== WORKS HERO ===== */
 .works-hero {
-  min-height: 30vh;
+  min-height: 32vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 140px 40px 60px;
-  background: var(--black);
+  padding: 150px 40px 60px;
+  background: #ffffff;
   text-align: center;
   position: relative;
+  overflow: hidden;
 }
 
+/* Soft cinematic vignette, pure greyscale */
 .works-hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center top, rgba(201,169,110,0.08) 0%, transparent 65%);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0, 0, 0, 0.035) 0%, transparent 70%),
+    linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
   pointer-events: none;
 }
 
-.works-hero-inner { position: relative; z-index: 1; }
+.works-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.works-hero .section-eyebrow {
+  display: inline-block;
+  font-family: var(--font-utility);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8a8a8a;
+  margin-bottom: 18px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.works-hero .section-eyebrow::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 1px;
+  background: #1a1a1a;
+}
 
 .works-hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  color: var(--white);
-  line-height: 1.05;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  color: #0a0a0a;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
   margin-bottom: 16px;
 }
 
+.works-hero-title .accent {
+  color: #0a0a0a;
+  font-style: italic;
+  font-weight: 500;
+  position: relative;
+}
+
 .works-hero-sub {
-  font-size: 0.92rem;
-  color: var(--white-50);
-  max-width: 480px;
+  font-size: 0.98rem;
+  color: #6e6e6e;
+  max-width: 460px;
   margin: 0 auto;
-  line-height: 1.7;
+  line-height: 1.75;
+  font-weight: 400;
 }
 
 /* ===== WORKS PAGE GRID ===== */
 .works-page-grid-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 40px 60px;
+  max-width: none !important;
+  width: 100%;
+  background: #f2f2f4;
+  /* Cinematic neutral grey, Apple-store style */
+  padding: 90px 24px 110px;
+  position: relative;
 }
 
 .works-page-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, 320px);
+  justify-content: center;
+  gap: 32px;
+  max-width: 1320px;
+  margin: 0 auto;
 }
 
 /* ===== CARD ===== */
 .works-page-card {
+  width: 320px;
   overflow: hidden;
-  border-radius: var(--radius);
-  transition: transform 0.4s cubic-bezier(0.25,0.8,0.25,1),
-              box-shadow 0.4s ease;
-  background: #000;
+  border-radius: 22px;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.6s ease;
+  background: #000000;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 28px rgba(0, 0, 0, 0.07);
+  filter: grayscale(1) contrast(1.02);
+  cursor: pointer;
+  position: relative;
+  /*
+    Padding is REQUIRED here, not cosmetic. The page script's click
+    handler explicitly ignores any tap landing inside `.embed-clip`
+    (`if (e.target.closest('.embed-clip')) return;`) so the B&W→colour
+    toggle can only ever fire from a tap landing on the CARD itself,
+    outside the video area. Without this padding, `.embed-clip` fills
+    100% of the card with zero margin, leaving no tappable zone — which
+    is why the toggle silently never fires, especially on mobile where
+    fingers always land inside the video bounds.
+  */
+  padding: 10px;
 }
 
-.works-page-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 50px rgba(201,169,110,0.18), 0 0 0 1px rgba(201,169,110,0.15);
+.works-page-card,
+.works-page-card:hover,
+.works-page-card.color-active {
+  background: #000000 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
-/* ===== EMBED CLIP — hides header & footer of Instagram embed ===== */
-/*
-  Instagram embed iframe structure (approximate heights):
-    - Header (profile pic + username + View Profile btn): ~65px
-    - Video area: ~540px  (for a 9:16 reel at 320px wide)
-    - Footer (View more on Instagram + likes + actions): ~100px
-  Total iframe height: ~705px
+.works-page-card:hover,
+.works-page-card.color-active {
+  transform: translateY(-10px) scale(1.025);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 28px 56px rgba(0, 0, 0, 0.18);
+  filter: grayscale(0) contrast(1);
+}
 
-  We set a fixed height on .embed-clip equal to just the video area,
-  then use margin-top on the iframe to push the header out of view above.
-  overflow:hidden clips both the top and bottom chrome.
-*/
+/* Thin chrome rim, like a camera viewfinder bezel — Apple-keynote feel */
+.works-page-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  z-index: 5;
+  pointer-events: none;
+}
+
 .embed-clip {
   width: 100%;
-  /*
-    header (~65px hidden by margin-top)  +  video  +  footer (~100px clipped here)
-    Reduce height to clip "View more on Instagram" + likes/actions bar
-  */
-  height: 450px;
+  height: 480px;
   overflow: hidden;
   position: relative;
-  background: #000;
+  background: #000000;
+  border-radius: 14px;
 }
 
-/* Shift the Instagram iframe UP so header scrolls out of view */
+/* Black gradient at bottom — covers any white Instagram footer that peeks through */
+.embed-clip::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent 0%, #000000 70%);
+  z-index: 4;
+  pointer-events: none;
+}
+
 .embed-clip .instagram-media,
 .embed-clip iframe {
-  margin-top: -65px !important;  /* hide the top profile header */
+  margin-top: -90px !important;
+  /* 60px native header × scale 1.5 */
   margin-left: 0 !important;
   margin-right: 0 !important;
   margin-bottom: 0 !important;
   width: 100% !important;
   min-width: unset !important;
   max-width: 100% !important;
+  min-height: 480px !important;
+  /* guarantees post-scale coverage of the wrapper, no bottom gap */
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   padding: 0 !important;
-  background: #000 !important;
+  background: transparent !important;
+  position: relative;
+  z-index: 2;
+  transform: scale(1.5) !important;
+  transform-origin: top center !important;
+}
+
+/* ===== CAMERA themed LOADER Fallback ===== */
+.embed-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  z-index: 1;
+  user-select: none;
+  transition: opacity 0.4s ease;
+}
+
+.loader-viewfinder {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.loader-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(255, 255, 255, 0.55);
+  border-style: solid;
+}
+
+.loader-corner.top-left {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+.loader-corner.top-right {
+  top: -1px;
+  right: -1px;
+  border-width: 2px 2px 0 0;
+}
+
+.loader-corner.bottom-left {
+  bottom: -1px;
+  left: -1px;
+  border-width: 0 0 2px 2px;
+}
+
+.loader-corner.bottom-right {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+.loader-crosshair {
+  width: 12px;
+  height: 12px;
+  position: relative;
+}
+
+.loader-crosshair::before,
+.loader-crosshair::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.loader-crosshair::before {
+  top: 5px;
+  left: 0;
+  width: 12px;
+  height: 1.5px;
+}
+
+.loader-crosshair::after {
+  top: 0;
+  left: 5px;
+  width: 1.5px;
+  height: 12px;
+}
+
+.loader-rec {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-utility);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.rec-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #e63946;
+  display: inline-block;
+  animation: recBlink 1.2s infinite;
+}
+
+@keyframes recBlink {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.loader-text {
+  font-family: var(--font-utility);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* ===== BACK BUTTON ===== */
+.works-back-btn-wrap {
+  text-align: center;
+  padding: 64px 0 0;
+  width: 100%;
+}
+
+.btn-back-dark {
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: #1a1a1a !important;
+  background: #ffffff !important;
+  border-radius: 999px !important;
+  padding: 14px 32px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.btn-back-dark:hover {
+  border-color: #1a1a1a !important;
+  color: #ffffff !important;
+  background: #1a1a1a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .works-page-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 580px) {
+  .works-hero {
+    padding: 120px 24px 36px;
+    min-height: auto;
+  }
+
+  .works-hero-title {
+    font-size: 1.9rem;
+  }
+
+  .works-hero-sub {
+    font-size: 0.9rem;
+  }
+
+  .works-page-grid-section {
+    padding: 36px 0 60px;
+  }
+
+  /* Full-width cards on mobile, no horizontal gap waste */
   .works-page-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 100%;
+    background: #f2f2f4;
+    padding: 0 16px;
   }
-  .works-hero {
-    padding: 120px 24px 40px;
+
+  /*
+    CRITICAL MOBILE FIX — Why CSS `filter` breaks touch on mobile:
+    On iOS Safari / Chrome Android, `filter: grayscale()` on a parent
+    element creates a new GPU compositing layer. The system uses this
+    layer boundary to route touch events, and can completely swallow
+    touches before they reach cross-origin iframes inside the card.
+    Result: videos can't be tapped to play, and the colour toggle never fires.
+
+    SOLUTION — mix-blend-mode overlay instead of filter:
+    We apply a white `::after` overlay with `mix-blend-mode: saturation`
+    to achieve the same B&W desaturation effect. Because it uses
+    `pointer-events: none` it does NOT intercept any touches, so the
+    iframe beneath receives all taps perfectly. When the user taps the
+    card, we add `.color-active` which hides the overlay → full colour.
+  */
+  .works-page-card {
+    width: 100%;
+    border-radius: 18px;
+    transform: none !important;
+    filter: none !important;      /* REMOVE filter — it blocks iframe touch events on WebKit */
   }
-  .works-page-grid-section {
-    padding-left: 20px;
-    padding-right: 20px;
+
+  /* The B&W overlay — replaces filter:grayscale. pointer-events:none is crucial. */
+  .works-page-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: #ffffff;
+    mix-blend-mode: saturation;   /* desaturates everything below without blocking touches */
+    z-index: 6;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    opacity: 1;
   }
-  /* On mobile the embed is narrower so heights shift slightly */
+
+  /* Tap the card → remove the overlay → card instantly shows in colour */
+  .works-page-card.color-active::after {
+    opacity: 0;
+  }
+
+  .works-page-card:hover,
+  .works-page-card.color-active {
+    filter: none !important;
+    transform: none !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 28px rgba(0, 0, 0, 0.07);
+  }
+
+  .works-page-card::before {
+    border-radius: 18px;
+  }
+
+  /*
+    HEIGHT FIX — video not filling full card height on mobile.
+    The inline script in works.html measures the IG iframe's native
+    `height` attribute and derives a cropped height for `.embed-clip`
+    using the formula (h - 200) * 1.5, tuned for desktop's 1.5x iframe
+    scale. On many phones the IG embed's native height comes back
+    smaller/different than on desktop, so the derived crop sits well
+    short of 480px and leaves a visible gap. We fix this by letting the
+    wrapper itself always fill the card edge-to-edge instead of relying
+    only on the script's computed height — min-height guarantees no gap
+    even if the script's calculated value undershoots.
+  */
   .embed-clip {
-    height: 420px;
+    width: 100%;
+    min-height: 480px;
+    height: 480px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .embed-clip .instagram-media,
+  .embed-clip iframe {
+    transform: scale(1.5) !important;
+    transform-origin: top center !important;
+    margin-top: -90px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    min-width: unset !important;
+    max-width: 100% !important;
+    min-height: 480px !important;
+    /* same gap fix as desktop — guarantees full coverage post-scale */
+    position: relative;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+  }
+
+  /* Thinner mask on mobile so it never sits over the tappable play area */
+  .embed-clip::after {
+    height: 36px;
+    pointer-events: none;
+  }
+
+  /*
+    Transparent tap-interceptor overlay.
+    Sits above the iframe (z-index: 8) and above the B&W overlay (z-index: 6).
+    pointer-events: all by default — catches the first finger tap.
+    After 1st tap: JS sets display:none so the iframe receives all subsequent taps.
+  */
+  .color-tap-zone {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 14px;
+    -webkit-tap-highlight-color: transparent;
   }
 }
